@@ -30,10 +30,17 @@ public class CrimeLab {
         return mCrimes;
     }
 
-    public Crime getCrime(UUID id) {
+    public Crime getCrime(UUID crimeId) {
         for (Crime crime : mCrimes) {
-            if (crime.getId().equals(id)) return crime;
+            if (crime.getId().equals(crimeId)) return crime;
         }
         return null;
+    }
+
+    public int getCrimeIndex(UUID crimeId) {
+        for (int i = 0; i < mCrimes.size(); i++) {
+            if (mCrimes.get(i).getId().equals(crimeId)) return i;
+        }
+        return 0;
     }
 }

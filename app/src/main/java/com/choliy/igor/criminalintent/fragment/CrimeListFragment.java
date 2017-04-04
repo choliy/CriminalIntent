@@ -14,7 +14,7 @@ import com.choliy.igor.criminalintent.CrimeAdapter;
 import com.choliy.igor.criminalintent.CrimeConstants;
 import com.choliy.igor.criminalintent.CrimeLab;
 import com.choliy.igor.criminalintent.R;
-import com.choliy.igor.criminalintent.activity.CrimeActivity;
+import com.choliy.igor.criminalintent.activity.CrimePagerActivity;
 
 import java.util.List;
 import java.util.UUID;
@@ -49,10 +49,10 @@ public class CrimeListFragment extends Fragment implements CrimeAdapter.OnCrimeC
     }
 
     @Override
-    public void onCrimeClick(UUID id, int crimePosition) {
+    public void onCrimeClick(UUID crimeId, int crimePosition) {
         mCrimePosition = crimePosition;
-        Intent intent = new Intent(getActivity(), CrimeActivity.class);
-        intent.putExtra(CrimeConstants.EXTRA_CRIME_ID, id);
+        Intent intent = new Intent(getActivity(), CrimePagerActivity.class);
+        intent.putExtra(CrimeConstants.EXTRA_CRIME_ID, crimeId);
         startActivity(intent);
     }
 

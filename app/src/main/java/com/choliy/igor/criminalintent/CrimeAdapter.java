@@ -60,8 +60,8 @@ public class CrimeAdapter extends RecyclerView.Adapter<CrimeAdapter.CrimeHolder>
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            UUID id = mCrimes.get(position).getId();
-            mClickListener.onCrimeClick(id, position);
+            UUID crimeId = mCrimes.get(position).getId();
+            mClickListener.onCrimeClick(crimeId, position);
         }
 
         private void bindView(int position) {
@@ -75,7 +75,7 @@ public class CrimeAdapter extends RecyclerView.Adapter<CrimeAdapter.CrimeHolder>
 
     public interface OnCrimeClickListener {
 
-        void onCrimeClick(UUID id, int crimePosition);
+        void onCrimeClick(UUID crimeId, int crimePosition);
 
     }
 }

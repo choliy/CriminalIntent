@@ -18,11 +18,11 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
 
         // First find out if some fragment is already in container,
         // if not, add new one.
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.fragmentContainer);
         if (fragment == null) {
             fragment = createFragment();
-            fm.beginTransaction()
+            fragmentManager.beginTransaction()
                     .add(R.id.fragmentContainer, fragment)
                     .commit();
         }

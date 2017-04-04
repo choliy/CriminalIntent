@@ -13,8 +13,12 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.choliy.igor.criminalintent.Crime;
+import com.choliy.igor.criminalintent.CrimeConstants;
+import com.choliy.igor.criminalintent.CrimeLab;
 import com.choliy.igor.criminalintent.CrimeUtils;
 import com.choliy.igor.criminalintent.R;
+
+import java.util.UUID;
 
 public class CrimeFragment extends Fragment {
 
@@ -26,7 +30,8 @@ public class CrimeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCrime = new Crime();
+        UUID crimeId = (UUID) getArguments().getSerializable(CrimeConstants.ARG_CRIME_ID);
+        mCrime = CrimeLab.getInstance(getActivity()).getCrime(crimeId);
     }
 
     @Override
@@ -55,8 +60,6 @@ public class CrimeFragment extends Fragment {
         });
 
         mDateButton = (Button) view.findViewById(R.id.crimeDate);
-        String formattedDate = CrimeUtils.formatDate(getActivity(), mCrime.getDate());
-        mDateButton.setText(formattedDate);
         mDateButton.setEnabled(false);
 
         mSolvedCheckBox = (CheckBox) view.findViewById(R.id.crimeSolved);
@@ -66,5 +69,18 @@ public class CrimeFragment extends Fragment {
                 mCrime.setSolved(isChecked);
             }
         });
+
+        mCrimeTitle.setText(mCrime.getTitle());
+        String formattedDate = CrimeUtils.formatDate(getActivity(), mCrime.getDate());
+        mDateButton.setText(formattedDate);
+        mSolvedCheckBox.setChecked(mCrime.isSolved());
+    }
+
+    public static CrimeFragment newInstance(UUID crimeId) {
+        Bundle args = new Bundle();
+        args.putSerializable(CrimeConstants.ARG_CRIME_ID, crimeId);
+        CrimeFragment fragment = new CrimeFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 }

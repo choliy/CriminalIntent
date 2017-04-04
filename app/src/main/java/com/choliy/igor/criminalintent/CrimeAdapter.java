@@ -7,18 +7,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
+import java.util.UUID;
 
 public class CrimeAdapter extends RecyclerView.Adapter<CrimeAdapter.CrimeHolder> {
 
     private Context mContext;
     private List<Crime> mCrimes;
+    private OnCrimeClickListener mClickListener;
 
-    public CrimeAdapter(Context context, List<Crime> crimes) {
+    public CrimeAdapter(Context context, List<Crime> crimes, OnCrimeClickListener clickListener) {
         mContext = context;
         mCrimes = crimes;
+        mClickListener = clickListener;
     }
 
     @Override
@@ -37,6 +39,10 @@ public class CrimeAdapter extends RecyclerView.Adapter<CrimeAdapter.CrimeHolder>
         holder.bindView(position);
     }
 
+    public void clearContext() {
+        mContext = null;
+    }
+
     class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView mCrimeTitle;
@@ -53,10 +59,9 @@ public class CrimeAdapter extends RecyclerView.Adapter<CrimeAdapter.CrimeHolder>
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(
-                    mContext,
-                    mCrimes.get(getAdapterPosition()).getTitle() + " clicked!", Toast.LENGTH_SHORT)
-                    .show();
+            int position = getAdapterPosition();
+            UUID id = mCrimes.get(position).getId();
+            mClickListener.onCrimeClick(id, position);
         }
 
         private void bindView(int position) {
@@ -66,5 +71,11 @@ public class CrimeAdapter extends RecyclerView.Adapter<CrimeAdapter.CrimeHolder>
             mCrimeDate.setText(formattedDate);
             mCrimeSolved.setChecked(crime.isSolved());
         }
+    }
+
+    public interface OnCrimeClickListener {
+
+        void onCrimeClick(UUID id, int crimePosition);
+
     }
 }

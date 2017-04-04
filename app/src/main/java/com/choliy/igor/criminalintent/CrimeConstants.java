@@ -2,6 +2,9 @@ package com.choliy.igor.criminalintent;
 
 public interface CrimeConstants {
 
+    String EXTRA_CRIME_ID = "com.choliy.igor.criminalintent.extra_crime_id";
+    String ARG_CRIME_ID = "com.choliy.igor.criminalintent.arg_crime_id";
+
     // Date & Time format constants
     String DATE_FORMAT = "d MMMM yyyy";
     String TIME_FORMAT_UK = "HH:mm";

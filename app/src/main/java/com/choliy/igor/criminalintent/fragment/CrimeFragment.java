@@ -1,5 +1,7 @@
 package com.choliy.igor.criminalintent.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -18,6 +20,7 @@ import com.choliy.igor.criminalintent.CrimeLab;
 import com.choliy.igor.criminalintent.CrimeUtils;
 import com.choliy.igor.criminalintent.R;
 
+import java.util.Date;
 import java.util.UUID;
 
 public class CrimeFragment extends Fragment {
@@ -25,7 +28,16 @@ public class CrimeFragment extends Fragment {
     private Crime mCrime;
     private EditText mCrimeTitle;
     private Button mDateButton;
+    private Button mTimeButton;
     private CheckBox mSolvedCheckBox;
+
+    public static CrimeFragment newInstance(UUID crimeId) {
+        Bundle args = new Bundle();
+        args.putSerializable(CrimeConstants.ARG_CRIME_ID, crimeId);
+        CrimeFragment fragment = new CrimeFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,7 +72,20 @@ public class CrimeFragment extends Fragment {
         });
 
         mDateButton = (Button) view.findViewById(R.id.crimeDate);
-        mDateButton.setEnabled(false);
+        mDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPicker(CrimeConstants.DATE_PICKER_TYPE);
+            }
+        });
+
+        mTimeButton = (Button) view.findViewById(R.id.crimeTime);
+        mTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPicker(CrimeConstants.TIME_PICKER_TYPE);
+            }
+        });
 
         mSolvedCheckBox = (CheckBox) view.findViewById(R.id.crimeSolved);
         mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -71,16 +96,37 @@ public class CrimeFragment extends Fragment {
         });
 
         mCrimeTitle.setText(mCrime.getTitle());
-        String formattedDate = CrimeUtils.formatDate(getActivity(), mCrime.getDate());
-        mDateButton.setText(formattedDate);
         mSolvedCheckBox.setChecked(mCrime.isSolved());
+        updateDate();
+        updateTime();
     }
 
-    public static CrimeFragment newInstance(UUID crimeId) {
-        Bundle args = new Bundle();
-        args.putSerializable(CrimeConstants.ARG_CRIME_ID, crimeId);
-        CrimeFragment fragment = new CrimeFragment();
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) return;
+
+        if (requestCode == CrimeConstants.REQUEST_CODE_PICKER) {
+            Date date = (Date) data.getSerializableExtra(CrimeConstants.EXTRA_DATE_TIME);
+            mCrime.setDate(date);
+            updateDate();
+            updateTime();
+        }
+    }
+
+    private void showPicker(int pickerType) {
+        DateTimePickerFragment pickerFragment = DateTimePickerFragment
+                .newInstance(mCrime.getDate(), pickerType);
+        pickerFragment.setTargetFragment(CrimeFragment.this, CrimeConstants.REQUEST_CODE_PICKER);
+        pickerFragment.show(getActivity().getSupportFragmentManager(), CrimeConstants.TAG_DIALOG);
+    }
+
+    private void updateDate() {
+        String formattedDate = CrimeUtils.formatDate(mCrime.getDate());
+        mDateButton.setText(formattedDate);
+    }
+
+    private void updateTime() {
+        String formattedDate = CrimeUtils.formatTime(getActivity(), mCrime.getDate());
+        mTimeButton.setText(formattedDate);
     }
 }

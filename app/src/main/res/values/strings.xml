@@ -4,4 +4,8 @@
     <string name="crime_details_label">Details</string>
     <string name="crime_solved_label">Solved?</string>
     <string name="crime_title_hint">Enter a title for the crime</string>
+    <string name="date_picker_dialog_title">Date of crime:</string>
+    <string name="time_picker_dialog_title">Date of crime:</string>
+    <string name="date_picker_button_title">Date Picker</string>
+    <string name="time_picker_button_title">Time Picker</string>
 </resources>

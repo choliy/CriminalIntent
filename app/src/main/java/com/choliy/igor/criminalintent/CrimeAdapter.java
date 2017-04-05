@@ -67,7 +67,7 @@ public class CrimeAdapter extends RecyclerView.Adapter<CrimeAdapter.CrimeHolder>
         private void bindView(int position) {
             Crime crime = mCrimes.get(position);
             mCrimeTitle.setText(crime.getTitle());
-            String formattedDate = CrimeUtils.formatDate(mContext, crime.getDate());
+            String formattedDate = CrimeUtils.formatListDate(mContext, crime.getDate());
             mCrimeDate.setText(formattedDate);
             mCrimeSolved.setChecked(crime.isSolved());
         }

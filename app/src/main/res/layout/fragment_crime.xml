@@ -24,12 +24,30 @@
         android:layout_height="wrap_content"
         android:text="@string/crime_details_label"/>
 
-    <Button
-        android:id="@+id/crimeDate"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/material_margin"
-        android:layout_marginRight="@dimen/material_margin"/>
+        android:layout_marginEnd="@dimen/material_margin"
+        android:layout_marginStart="@dimen/material_margin"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/crimeDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/small_margin"
+            android:layout_weight="1"
+            android:text="@string/date_picker_button_title"/>
+
+        <Button
+            android:id="@+id/crimeTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/small_margin"
+            android:layout_weight="1"
+            android:text="@string/time_picker_button_title"/>
+
+    </LinearLayout>
 
     <CheckBox
         android:id="@+id/crimeSolved"

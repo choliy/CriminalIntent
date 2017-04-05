@@ -40,7 +40,7 @@ public class CrimePagerActivity extends AppCompatActivity {
         });
 
         UUID crimeId = (UUID) getIntent().getSerializableExtra(CrimeConstants.EXTRA_CRIME_ID);
-        int crimeIndex = CrimeLab.getInstance(this).getCrimeIndex(crimeId);
-        viewPager.setCurrentItem(crimeIndex);
+        int crimePosition = CrimeLab.getInstance(this).getCrimeIndex(crimeId);
+        viewPager.setCurrentItem(crimePosition);
     }
 }

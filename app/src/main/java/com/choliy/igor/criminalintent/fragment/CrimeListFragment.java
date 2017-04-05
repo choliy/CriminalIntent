@@ -2,10 +2,15 @@ package com.choliy.igor.criminalintent.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -24,9 +29,18 @@ public class CrimeListFragment extends Fragment implements CrimeAdapter.OnCrimeC
     private RecyclerView mRecyclerView;
     private CrimeAdapter mAdapter;
     private int mCrimePosition;
+    private boolean mSubtitleVisible;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (savedInstanceState != null)
+            mSubtitleVisible = savedInstanceState.getBoolean(CrimeConstants.SAVED_SUBTITLE_VISIBLE);
         return inflater.inflate(R.layout.fragment_crime_list, container, false);
     }
 
@@ -46,6 +60,50 @@ public class CrimeListFragment extends Fragment implements CrimeAdapter.OnCrimeC
         } else {
             mAdapter.notifyItemChanged(mCrimePosition);
         }
+
+        updateSubtitle();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mAdapter.clearContext();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_list, menu);
+
+        MenuItem subtitleItem = menu.findItem(R.id.menuShowSubtitle);
+        if (mSubtitleVisible) subtitleItem.setTitle(R.string.menu_hide_subtitle);
+        else subtitleItem.setTitle(R.string.menu_show_subtitle);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menuNewCrime:
+                Crime crime = new Crime();
+                CrimeLab.getInstance(getActivity()).addCrime(crime);
+                Intent intent = new Intent(getActivity(), CrimePagerActivity.class);
+                intent.putExtra(CrimeConstants.EXTRA_CRIME_ID, crime.getId());
+                startActivity(intent);
+                return true;
+            case R.id.menuShowSubtitle:
+                mSubtitleVisible = !mSubtitleVisible;
+                getActivity().invalidateOptionsMenu();
+                updateSubtitle();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(CrimeConstants.SAVED_SUBTITLE_VISIBLE, mSubtitleVisible);
     }
 
     @Override
@@ -56,9 +114,13 @@ public class CrimeListFragment extends Fragment implements CrimeAdapter.OnCrimeC
         startActivity(intent);
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        mAdapter.clearContext();
+    private void updateSubtitle() {
+        int crimeCount = CrimeLab.getInstance(getActivity()).getCrimes().size();
+        String subtitle = getResources()
+                .getQuantityString(R.plurals.menu_subtitle_plural_format, crimeCount, crimeCount);
+        if (!mSubtitleVisible) subtitle = null;
+
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.getSupportActionBar().setSubtitle(subtitle);
     }
 }

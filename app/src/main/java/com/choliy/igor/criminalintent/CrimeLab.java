@@ -13,12 +13,12 @@ public class CrimeLab {
 
     private CrimeLab(Context context) {
         mCrimes = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            Crime crime = new Crime();
-            crime.setTitle("Crime #" + i);
-            crime.setSolved(i % 2 == 0);
-            mCrimes.add(crime);
-        }
+//        for (int i = 0; i < 100; i++) {
+//            Crime crime = new Crime();
+//            crime.setTitle("Crime #" + i);
+//            crime.setSolved(i % 2 == 0);
+//            mCrimes.add(crime);
+//        }
     }
 
     public static CrimeLab getInstance(Context context) {
@@ -42,5 +42,9 @@ public class CrimeLab {
             if (mCrimes.get(i).getId().equals(crimeId)) return i;
         }
         return 0;
+    }
+
+    public void addCrime(Crime crime) {
+        mCrimes.add(crime);
     }
 }

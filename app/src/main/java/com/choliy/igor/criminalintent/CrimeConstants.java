@@ -5,6 +5,7 @@ public interface CrimeConstants {
     String TAG_DIALOG = "com.choliy.igor.criminalintent.dialog_date_picker";
     String EXTRA_CRIME_ID = "com.choliy.igor.criminalintent.extra_crime_id";
     String ARG_CRIME_ID = "com.choliy.igor.criminalintent.arg_crime_id";
+    String SAVED_SUBTITLE_VISIBLE = "com.choliy.igor.criminalintent.subtitle";
 
     // Date & Time pickers constants
     String EXTRA_DATE_TIME = "com.choliy.igor.criminalintent.extra_date_time";

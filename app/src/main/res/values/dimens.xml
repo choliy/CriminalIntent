@@ -4,4 +4,5 @@
     <dimen name="material_margin">16dp</dimen>
     <dimen name="normal_margin">32dp</dimen>
     <dimen name="big_margin">64dp</dimen>
+    <dimen name="huge_margin">128dp</dimen>
 </resources>

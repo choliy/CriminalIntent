@@ -15,10 +15,10 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.choliy.igor.criminalintent.Crime;
-import com.choliy.igor.criminalintent.CrimeConstants;
-import com.choliy.igor.criminalintent.CrimeLab;
 import com.choliy.igor.criminalintent.CrimeUtils;
 import com.choliy.igor.criminalintent.R;
+import com.choliy.igor.criminalintent.data.CrimeConstants;
+import com.choliy.igor.criminalintent.data.CrimeLab;
 
 import java.util.Date;
 import java.util.UUID;
@@ -99,6 +99,12 @@ public class CrimeFragment extends Fragment {
         mSolvedCheckBox.setChecked(mCrime.isSolved());
         updateDate();
         updateTime();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        CrimeLab.getInstance(getActivity()).updateCrime(mCrime);
     }
 
     @Override

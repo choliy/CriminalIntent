@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,8 +17,8 @@ import android.view.ViewGroup;
 
 import com.choliy.igor.criminalintent.Crime;
 import com.choliy.igor.criminalintent.CrimeAdapter;
-import com.choliy.igor.criminalintent.CrimeConstants;
-import com.choliy.igor.criminalintent.CrimeLab;
+import com.choliy.igor.criminalintent.data.CrimeConstants;
+import com.choliy.igor.criminalintent.data.CrimeLab;
 import com.choliy.igor.criminalintent.R;
 import com.choliy.igor.criminalintent.activity.CrimePagerActivity;
 
@@ -28,7 +29,6 @@ public class CrimeListFragment extends Fragment implements CrimeAdapter.OnCrimeC
 
     private RecyclerView mRecyclerView;
     private CrimeAdapter mAdapter;
-    private int mCrimePosition;
     private boolean mSubtitleVisible;
 
     @Override
@@ -48,6 +48,8 @@ public class CrimeListFragment extends Fragment implements CrimeAdapter.OnCrimeC
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        ItemTouchHelper touchHelper = new ItemTouchHelper(new OnSwipeCallback());
+        touchHelper.attachToRecyclerView(mRecyclerView);
     }
 
     @Override
@@ -58,16 +60,11 @@ public class CrimeListFragment extends Fragment implements CrimeAdapter.OnCrimeC
             mAdapter = new CrimeAdapter(getActivity(), crimes, this);
             mRecyclerView.setAdapter(mAdapter);
         } else {
-            mAdapter.notifyItemChanged(mCrimePosition);
+            mAdapter.notifyDataSetChanged();
         }
 
+        mAdapter.emptyList();
         updateSubtitle();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mAdapter.clearContext();
     }
 
     @Override
@@ -107,8 +104,7 @@ public class CrimeListFragment extends Fragment implements CrimeAdapter.OnCrimeC
     }
 
     @Override
-    public void onCrimeClick(UUID crimeId, int crimePosition) {
-        mCrimePosition = crimePosition;
+    public void onCrimeClick(UUID crimeId) {
         Intent intent = new Intent(getActivity(), CrimePagerActivity.class);
         intent.putExtra(CrimeConstants.EXTRA_CRIME_ID, crimeId);
         startActivity(intent);
@@ -122,5 +118,27 @@ public class CrimeListFragment extends Fragment implements CrimeAdapter.OnCrimeC
 
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.getSupportActionBar().setSubtitle(subtitle);
+    }
+
+    private class OnSwipeCallback extends ItemTouchHelper.SimpleCallback {
+
+        OnSwipeCallback() {
+            super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+        }
+
+        @Override
+        public boolean onMove(RecyclerView recyclerView,
+                              RecyclerView.ViewHolder viewHolder,
+                              RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+            int crimePosition = (int) viewHolder.itemView.getTag();
+            CrimeLab.getInstance(getActivity()).deleteCrime(crimePosition);
+            mAdapter.notifyItemRemoved(crimePosition);
+            mAdapter.emptyList();
+        }
     }
 }

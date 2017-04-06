@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
-import com.choliy.igor.criminalintent.CrimeConstants;
+import com.choliy.igor.criminalintent.data.CrimeConstants;
 import com.choliy.igor.criminalintent.R;
 
 import java.util.Calendar;

@@ -15,10 +15,21 @@
 
     <!-- Menu -->
     <string name="menu_new_crime">New Crime</string>
+    <string name="menu_remove_crime">Remove Crime</string>
     <string name="menu_show_subtitle">Show Subtitle</string>
     <string name="menu_hide_subtitle">Hide Subtitle</string>
     <plurals name="menu_subtitle_plural_format">
         <item quantity="one">%1$s crime</item>
         <item quantity="other">%1$s crimes</item>
     </plurals>
+
+    <!-- Dialogs -->
+    <string name="dialog_delete_title">Do you really want to delete this crime?</string>
+    <string name="dialog_delete_yes">Yes</string>
+    <string name="dialog_delete_no">No</string>
+
+    <!-- Other -->
+    <string name="image_description_no_crimes">No crimes</string>
+    <string name="empty_list_text">No Crimes detected</string>
+
 </resources>

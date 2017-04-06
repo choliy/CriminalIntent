@@ -1,11 +1,13 @@
 package com.choliy.igor.criminalintent;
 
 import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -39,8 +41,11 @@ public class CrimeAdapter extends RecyclerView.Adapter<CrimeAdapter.CrimeHolder>
         holder.bindView(position);
     }
 
-    public void clearContext() {
-        mContext = null;
+    public void emptyList() {
+        LinearLayout emptyList =
+                (LinearLayout) ((AppCompatActivity) mContext).findViewById(R.id.emptyList);
+        if (getItemCount() > 0) emptyList.setVisibility(View.INVISIBLE);
+        else emptyList.setVisibility(View.VISIBLE);
     }
 
     class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -61,7 +66,7 @@ public class CrimeAdapter extends RecyclerView.Adapter<CrimeAdapter.CrimeHolder>
         public void onClick(View view) {
             int position = getAdapterPosition();
             UUID crimeId = mCrimes.get(position).getId();
-            mClickListener.onCrimeClick(crimeId, position);
+            mClickListener.onCrimeClick(crimeId);
         }
 
         private void bindView(int position) {
@@ -70,12 +75,13 @@ public class CrimeAdapter extends RecyclerView.Adapter<CrimeAdapter.CrimeHolder>
             String formattedDate = CrimeUtils.formatListDate(mContext, crime.getDate());
             mCrimeDate.setText(formattedDate);
             mCrimeSolved.setChecked(crime.isSolved());
+            itemView.setTag(position);
         }
     }
 
     public interface OnCrimeClickListener {
 
-        void onCrimeClick(UUID crimeId, int crimePosition);
+        void onCrimeClick(UUID crimeId);
 
     }
 }

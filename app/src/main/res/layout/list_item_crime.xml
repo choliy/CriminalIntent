@@ -37,7 +37,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_margin="@dimen/material_margin"
-        android:checked="true"
-        android:enabled="false"/>
+        android:checked="true"/>
 
 </LinearLayout>

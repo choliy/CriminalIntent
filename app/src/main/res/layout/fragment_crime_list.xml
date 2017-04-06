@@ -13,16 +13,17 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="@dimen/huge_margin"
-            android:layout_height="@dimen/huge_margin"
+            android:layout_width="@dimen/image_size"
+            android:layout_height="@dimen/image_size"
+            android:layout_marginBottom="@dimen/material_margin"
             android:contentDescription="@string/image_description_no_crimes"
-            android:src="@drawable/ic_no_crimes"/>
+            android:src="@drawable/empty_list"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/empty_list_text"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@android:color/darker_gray"/>
 
     </LinearLayout>

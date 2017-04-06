@@ -7,8 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.choliy.igor.criminalintent.data.CrimeLab;
 
 import java.util.List;
 import java.util.UUID;
@@ -52,7 +55,9 @@ public class CrimeAdapter extends RecyclerView.Adapter<CrimeAdapter.CrimeHolder>
         else emptyList.setVisibility(View.VISIBLE);
     }
 
-    class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class CrimeHolder extends RecyclerView.ViewHolder implements
+            View.OnClickListener,
+            CompoundButton.OnCheckedChangeListener {
 
         private TextView mCrimeTitle;
         private TextView mCrimeDate;
@@ -63,6 +68,7 @@ public class CrimeAdapter extends RecyclerView.Adapter<CrimeAdapter.CrimeHolder>
             mCrimeTitle = (TextView) itemView.findViewById(R.id.listItemTitle);
             mCrimeDate = (TextView) itemView.findViewById(R.id.listItemDate);
             mCrimeSolved = (CheckBox) itemView.findViewById(R.id.listItemSolved);
+            mCrimeSolved.setOnCheckedChangeListener(this);
             itemView.setOnClickListener(this);
         }
 
@@ -71,6 +77,13 @@ public class CrimeAdapter extends RecyclerView.Adapter<CrimeAdapter.CrimeHolder>
             int position = getAdapterPosition();
             UUID crimeId = mCrimes.get(position).getId();
             mClickListener.onCrimeClick(crimeId);
+        }
+
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+            Crime crime = mCrimes.get(getAdapterPosition());
+            crime.setSolved(checked);
+            CrimeLab.getInstance(mContext).updateCrime(crime);
         }
 
         private void bindView(int position) {

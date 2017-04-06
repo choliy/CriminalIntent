@@ -41,6 +41,10 @@ public class CrimeAdapter extends RecyclerView.Adapter<CrimeAdapter.CrimeHolder>
         holder.bindView(position);
     }
 
+    public void updateCrimeList(List<Crime> crimes) {
+        mCrimes = crimes;
+    }
+
     public void emptyList() {
         LinearLayout emptyList =
                 (LinearLayout) ((AppCompatActivity) mContext).findViewById(R.id.emptyList);
@@ -75,7 +79,7 @@ public class CrimeAdapter extends RecyclerView.Adapter<CrimeAdapter.CrimeHolder>
             String formattedDate = CrimeUtils.formatListDate(mContext, crime.getDate());
             mCrimeDate.setText(formattedDate);
             mCrimeSolved.setChecked(crime.isSolved());
-            itemView.setTag(position);
+            itemView.setTag(crime.getId());
         }
     }
 

@@ -8,13 +8,13 @@ import com.choliy.igor.criminalintent.Crime;
 import java.util.Date;
 import java.util.UUID;
 
-public class CrimeCursorWrapper extends CursorWrapper {
+class CrimeCursorWrapper extends CursorWrapper {
 
-    public CrimeCursorWrapper(Cursor cursor) {
+    CrimeCursorWrapper(Cursor cursor) {
         super(cursor);
     }
 
-    public Crime getCrime() {
+    Crime getCrime() {
         String uuid = getString(getColumnIndex(CrimeContract.COLUMN_UUID));
         String title = getString(getColumnIndex(CrimeContract.COLUMN_TITLE));
         long date = getLong(getColumnIndex(CrimeContract.COLUMN_DATE));

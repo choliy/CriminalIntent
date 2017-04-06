@@ -28,6 +28,11 @@
     <string name="dialog_delete_yes">Yes</string>
     <string name="dialog_delete_no">No</string>
 
+    <!-- StackBar -->
+    <string name="snack_bar_text_removed">Crime removed</string>
+    <string name="snack_bar_text_restored">Crime restored</string>
+    <string name="snack_bar_button">Undo</string>
+
     <!-- Other -->
     <string name="image_description_no_crimes">No crimes</string>
     <string name="empty_list_text">No Crimes detected</string>

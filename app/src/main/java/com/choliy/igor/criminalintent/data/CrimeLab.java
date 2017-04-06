@@ -27,10 +27,10 @@ public class CrimeLab {
 
     public List<Crime> getCrimes() {
         List<Crime> crimes = new ArrayList<>();
-        CrimeCursorWrapper cursorWrapper = queryCrimes(null, null, null);
+        CrimeCursorWrapper cursorWrapper = queryCrimes(null, null);
+        cursorWrapper.moveToFirst();
 
         try {
-            cursorWrapper.moveToFirst();
             while (!cursorWrapper.isAfterLast()) {
                 crimes.add(cursorWrapper.getCrime());
                 cursorWrapper.moveToNext();
@@ -42,7 +42,7 @@ public class CrimeLab {
         return crimes;
     }
 
-    private CrimeCursorWrapper queryCrimes(String whereClause, String[] whereArgs, String orderBy) {
+    private CrimeCursorWrapper queryCrimes(String whereClause, String[] whereArgs) {
         Cursor cursor = mDatabase.query(
                 CrimeContract.TABLE_NAME,
                 null, // null will choose all columns
@@ -50,7 +50,7 @@ public class CrimeLab {
                 whereArgs,
                 null, // groupBy
                 null, // having
-                orderBy);
+                CrimeContract.COLUMN_DATE + " DESC");
 
         return new CrimeCursorWrapper(cursor);
     }
@@ -58,23 +58,15 @@ public class CrimeLab {
     public Crime getCrime(UUID crimeId) {
         CrimeCursorWrapper cursorWrapper = queryCrimes(
                 CrimeContract.COLUMN_UUID + " = ?",
-                new String[]{crimeId.toString()},
-                null);
+                new String[]{crimeId.toString()});
+        cursorWrapper.moveToFirst();
 
         try {
             if (cursorWrapper.getCount() == 0) return null;
-            cursorWrapper.moveToFirst();
             return cursorWrapper.getCrime();
         } finally {
             cursorWrapper.close();
         }
-    }
-
-    public int getCrimeIndex(UUID crimeId) {
-//        for (int i = 0; i < mCrimes.size(); i++) {
-//            if (mCrimes.get(i).getId().equals(crimeId)) return i;
-//        }
-        return 0;
     }
 
     public void addCrime(Crime crime) {
@@ -92,17 +84,11 @@ public class CrimeLab {
                 new String[]{crime.getId().toString()});
     }
 
-    public void deleteCrime(int crimePosition) {
+    public void deleteCrime(UUID uuid) {
         mDatabase.delete(
                 CrimeContract.TABLE_NAME,
-                CrimeContract._ID + " = ?",
-                new String[] {String.valueOf(crimePosition)});
-//        for (int i = 0; i < mCrimes.size(); i++) {
-//            if (mCrimes.indexOf(mCrimes.get(i)) == crimePosition) {
-//                mCrimes.remove(i);
-//                break;
-//            }
-//        }
+                CrimeContract.COLUMN_UUID + " = ?",
+                new String[]{uuid.toString()});
     }
 
     private static ContentValues getContentValues(Crime crime) {

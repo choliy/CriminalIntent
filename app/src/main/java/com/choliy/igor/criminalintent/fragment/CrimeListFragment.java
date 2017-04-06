@@ -2,7 +2,6 @@ package com.choliy.igor.criminalintent.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,10 +16,11 @@ import android.view.ViewGroup;
 
 import com.choliy.igor.criminalintent.Crime;
 import com.choliy.igor.criminalintent.CrimeAdapter;
-import com.choliy.igor.criminalintent.data.CrimeConstants;
-import com.choliy.igor.criminalintent.data.CrimeLab;
+import com.choliy.igor.criminalintent.CrimeUtils;
 import com.choliy.igor.criminalintent.R;
 import com.choliy.igor.criminalintent.activity.CrimePagerActivity;
+import com.choliy.igor.criminalintent.data.CrimeConstants;
+import com.choliy.igor.criminalintent.data.CrimeLab;
 
 import java.util.List;
 import java.util.UUID;
@@ -32,15 +32,15 @@ public class CrimeListFragment extends Fragment implements CrimeAdapter.OnCrimeC
     private boolean mSubtitleVisible;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        if (savedInstanceState != null)
+            mSubtitleVisible = savedInstanceState.getBoolean(CrimeConstants.SAVED_SUBTITLE_VISIBLE);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (savedInstanceState != null)
-            mSubtitleVisible = savedInstanceState.getBoolean(CrimeConstants.SAVED_SUBTITLE_VISIBLE);
         return inflater.inflate(R.layout.fragment_crime_list, container, false);
     }
 
@@ -60,6 +60,7 @@ public class CrimeListFragment extends Fragment implements CrimeAdapter.OnCrimeC
             mAdapter = new CrimeAdapter(getActivity(), crimes, this);
             mRecyclerView.setAdapter(mAdapter);
         } else {
+            mAdapter.updateCrimeList(crimes);
             mAdapter.notifyDataSetChanged();
         }
 
@@ -135,10 +136,20 @@ public class CrimeListFragment extends Fragment implements CrimeAdapter.OnCrimeC
 
         @Override
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-            int crimePosition = (int) viewHolder.itemView.getTag();
-            CrimeLab.getInstance(getActivity()).deleteCrime(crimePosition);
-            mAdapter.notifyItemRemoved(crimePosition);
+            int position = viewHolder.getAdapterPosition();
+            UUID uuid = (UUID) viewHolder.itemView.getTag();
+            Crime crime = CrimeLab.getInstance(getActivity()).getCrime(uuid);
+            CrimeLab.getInstance(getActivity()).deleteCrime(uuid);
+            mAdapter.updateCrimeList(CrimeLab.getInstance(getActivity()).getCrimes());
+            mAdapter.notifyItemRemoved(position);
             mAdapter.emptyList();
+
+            CrimeUtils.undoSnackBar(
+                    getActivity(),
+                    getView(),
+                    crime,
+                    mAdapter,
+                    position);
         }
     }
 }

@@ -10,10 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.choliy.igor.criminalintent.Crime;
-import com.choliy.igor.criminalintent.data.CrimeConstants;
-import com.choliy.igor.criminalintent.data.CrimeLab;
 import com.choliy.igor.criminalintent.CrimeUtils;
 import com.choliy.igor.criminalintent.R;
+import com.choliy.igor.criminalintent.data.CrimeConstants;
+import com.choliy.igor.criminalintent.data.CrimeLab;
 import com.choliy.igor.criminalintent.fragment.CrimeFragment;
 
 import java.util.List;
@@ -63,11 +63,8 @@ public class CrimePagerActivity extends AppCompatActivity {
         });
 
         UUID crimeId = (UUID) getIntent().getSerializableExtra(CrimeConstants.EXTRA_CRIME_ID);
-        mCrimePosition = CrimeLab.getInstance(this).getCrimeIndex(crimeId);
+        mCrimePosition = getCrimeIndex(crimeId);
         viewPager.setCurrentItem(mCrimePosition);
-
-        if (savedInstanceState != null)
-            mCrimePosition = savedInstanceState.getInt(CrimeConstants.EXTRA_CRIME_POSITION);
     }
 
     @Override
@@ -80,16 +77,18 @@ public class CrimePagerActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuDeleteCrime:
-                CrimeUtils.deleteDialog(CrimePagerActivity.this, mCrimePosition, this);
+                Crime crime = mCrimes.get(mCrimePosition);
+                CrimeUtils.deleteDialog(CrimePagerActivity.this, crime.getId(), this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(CrimeConstants.EXTRA_CRIME_POSITION, mCrimePosition);
+    public int getCrimeIndex(UUID crimeId) {
+        for (int i = 0; i < mCrimes.size(); i++) {
+            if (mCrimes.get(i).getId().equals(crimeId)) return i;
+        }
+        return 0;
     }
 }

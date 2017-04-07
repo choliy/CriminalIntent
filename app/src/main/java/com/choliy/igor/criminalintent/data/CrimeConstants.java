@@ -14,6 +14,7 @@ public interface CrimeConstants {
 
     int REQUEST_CODE_PICKER = 1001;
     int REQUEST_CODE_CONTACT = 1002;
+    int REQUEST_CODE_PHOTO = 1003;
     int DATE_PICKER_TYPE = 2001;
     int TIME_PICKER_TYPE = 2002;
 

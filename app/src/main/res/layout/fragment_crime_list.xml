@@ -16,7 +16,7 @@
             android:layout_width="@dimen/image_size"
             android:layout_height="@dimen/image_size"
             android:layout_marginBottom="@dimen/medium_margin"
-            android:contentDescription="@string/image_description_no_crimes"
+            android:contentDescription="@string/description_no_crimes"
             android:src="@drawable/empty_list"/>
 
         <TextView

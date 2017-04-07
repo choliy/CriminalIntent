@@ -4,9 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
 
 import com.choliy.igor.criminalintent.Crime;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -99,5 +101,12 @@ public class CrimeLab {
         values.put(CrimeContract.COLUMN_SOLVED, crime.isSolved() ? 1 : 0);
         values.put(CrimeContract.COLUMN_SUSPECT, crime.getSuspect());
         return values;
+    }
+
+    public File getPhotoFile(Context context, Crime crime) {
+        File externalFilesDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        if (externalFilesDir == null) return null;
+
+        return new File(externalFilesDir, crime.getPhotoFileName());
     }
 }

@@ -88,8 +88,9 @@ public class CrimeAdapter extends RecyclerView.Adapter<CrimeAdapter.CrimeHolder>
 
         private void bindView(int position) {
             Crime crime = mCrimes.get(position);
-            if (crime.getTitle().equals("")) mCrimeTitle.setText(R.string.crime_title_empty);
-            else mCrimeTitle.setText(crime.getTitle());
+//            if (crime.getTitle().equals("")) mCrimeTitle.setText(R.string.crime_title_empty);
+//            else
+                mCrimeTitle.setText(crime.getTitle());
             String formattedDate = CrimeUtils.formatListDate(mContext, crime.getDate());
             mCrimeDate.setText(formattedDate);
             mCrimeSolved.setChecked(crime.isSolved());

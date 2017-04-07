@@ -44,8 +44,14 @@ public final class CrimeUtils {
         return sdf.format(time);
     }
 
-    public static String formatCrimeReport(Date date) {
-        return DateFormat.format(CrimeConstants.DATE_FORMAT, date).toString();
+    public static String formatCrimeReport(Context context, Date date) {
+        String formattedReport;
+        if (DateFormat.is24HourFormat(context))
+            formattedReport = DateFormat.format(CrimeConstants.INFO_DATE_FORMAT_UK, date).toString();
+        else
+            formattedReport = DateFormat.format(CrimeConstants.INFO_DATE_FORMAT_US, date).toString();
+
+        return formattedReport;
     }
 
     public static void deleteDialog(final Context context,

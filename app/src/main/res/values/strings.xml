@@ -48,7 +48,8 @@
     <string name="snack_bar_button">Undo</string>
 
     <!-- Other -->
-    <string name="image_description_no_crimes">No crimes</string>
+    <string name="description_no_crimes">No crimes</string>
+    <string name="description_crime_picture">Crime picture</string>
     <string name="empty_list_text_primary">No crimes detected</string>
     <string name="empty_list_text_secondary">Add new crime</string>
 

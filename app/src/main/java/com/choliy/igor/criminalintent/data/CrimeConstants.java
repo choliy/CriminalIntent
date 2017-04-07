@@ -13,6 +13,7 @@ public interface CrimeConstants {
     String ARG_PICKER_TYPE = "com.choliy.igor.criminalintent.arg_picker_type";
 
     int REQUEST_CODE_PICKER = 1001;
+    int REQUEST_CODE_CONTACT = 1002;
     int DATE_PICKER_TYPE = 2001;
     int TIME_PICKER_TYPE = 2002;
 

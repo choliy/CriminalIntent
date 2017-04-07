@@ -44,6 +44,10 @@ public final class CrimeUtils {
         return sdf.format(time);
     }
 
+    public static String formatCrimeReport(Date date) {
+        return DateFormat.format(CrimeConstants.DATE_FORMAT, date).toString();
+    }
+
     public static void deleteDialog(final Context context,
                                     final UUID uuid,
                                     final AppCompatActivity activity) {
@@ -82,6 +86,7 @@ public final class CrimeUtils {
                 List<Crime> crimes = CrimeLab.getInstance(context).getCrimes();
                 adapter.notifyItemInserted(crimePosition);
                 adapter.updateCrimeList(crimes);
+                adapter.emptyListVisibility();
                 Snackbar.make(view, R.string.snack_bar_text_restored, Snackbar.LENGTH_SHORT).show();
             }
         });

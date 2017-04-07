@@ -97,6 +97,7 @@ public class CrimeLab {
         values.put(CrimeContract.COLUMN_TITLE, crime.getTitle());
         values.put(CrimeContract.COLUMN_DATE, crime.getDate().getTime());
         values.put(CrimeContract.COLUMN_SOLVED, crime.isSolved() ? 1 : 0);
+        values.put(CrimeContract.COLUMN_SUSPECT, crime.getSuspect());
         return values;
     }
 }

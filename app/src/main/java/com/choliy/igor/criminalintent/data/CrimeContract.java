@@ -9,4 +9,5 @@ final class CrimeContract implements BaseColumns {
     static final String COLUMN_TITLE = "title";
     static final String COLUMN_DATE = "date";
     static final String COLUMN_SOLVED = "solved";
+    static final String COLUMN_SUSPECT = "suspect";
 }

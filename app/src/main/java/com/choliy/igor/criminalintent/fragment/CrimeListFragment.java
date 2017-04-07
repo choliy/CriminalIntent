@@ -64,7 +64,7 @@ public class CrimeListFragment extends Fragment implements CrimeAdapter.OnCrimeC
             mAdapter.notifyDataSetChanged();
         }
 
-        mAdapter.emptyList();
+        mAdapter.emptyListVisibility();
         updateSubtitle();
     }
 
@@ -142,7 +142,7 @@ public class CrimeListFragment extends Fragment implements CrimeAdapter.OnCrimeC
             CrimeLab.getInstance(getActivity()).deleteCrime(uuid);
             mAdapter.updateCrimeList(CrimeLab.getInstance(getActivity()).getCrimes());
             mAdapter.notifyItemRemoved(position);
-            mAdapter.emptyList();
+            mAdapter.emptyListVisibility();
 
             CrimeUtils.undoSnackBar(
                     getActivity(),

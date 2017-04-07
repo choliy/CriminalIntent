@@ -1,60 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <TextView
-        style="?android:listSeparatorTextViewStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/crime_title_label"/>
-
-    <EditText
-        android:id="@+id/crimeTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/crime_title_hint"
-        android:inputType="text|textCapSentences"/>
-
-    <TextView
-        style="?android:listSeparatorTextViewStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/crime_details_label"/>
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/material_margin"
-        android:layout_marginStart="@dimen/material_margin"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/crimeDate"
-            android:layout_width="0dp"
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/small_margin"
-            android:layout_weight="1"
-            android:text="@string/date_picker_button_title"/>
+            android:layout_margin="@dimen/list_item_margin">
 
-        <Button
-            android:id="@+id/crimeTime"
-            android:layout_width="0dp"
+            <EditText
+                android:id="@+id/crimeTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/list_item_margin"
+                android:background="@drawable/custom_edit_text"
+                android:hint="@string/crime_title_hint"
+                android:inputType="textCapSentences|textMultiLine"
+                android:padding="@dimen/small_margin"
+                android:textColor="@color/textColorPrimary"
+                android:textColorHint="@color/textColorSecondary"/>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/small_margin"
-            android:layout_weight="1"
-            android:text="@string/time_picker_button_title"/>
+            android:layout_marginBottom="@dimen/list_item_margin"
+            android:layout_marginEnd="@dimen/list_item_margin"
+            android:layout_marginStart="@dimen/list_item_margin">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/crimeDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_button"
+                    android:text="@string/date_picker_button_title"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/textColorPrimary"/>
+
+                <View
+                    android:layout_width="@dimen/view_divider_width"
+                    android:layout_height="match_parent"
+                    android:background="@color/viewDividerColor"/>
+
+                <Button
+                    android:id="@+id/crimeTime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_button"
+                    android:text="@string/time_picker_button_title"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/textColorPrimary"/>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/list_item_margin"
+            android:layout_marginStart="@dimen/list_item_margin">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/crimeSuspect"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_button"
+                    android:text="@string/crime_suspect_text"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/textColorPrimary"/>
+
+                <View
+                    android:layout_width="@dimen/view_divider_width"
+                    android:layout_height="match_parent"
+                    android:background="@color/viewDividerColor"/>
+
+                <Button
+                    android:id="@+id/crimeReport"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_button"
+                    android:text="@string/crime_report_text"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/textColorPrimary"/>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/list_item_margin">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="@dimen/small_margin"
+                    android:layout_height="match_parent"/>
+
+                <CheckBox
+                    android:id="@+id/crimeSolved"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/medium_margin"
+                    android:paddingEnd="@dimen/small_margin"
+                    android:paddingStart="@dimen/small_margin"
+                    android:paddingTop="@dimen/medium_margin"
+                    android:text="@string/crime_solved_label"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/textColorPrimary"/>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
 
     </LinearLayout>
 
-    <CheckBox
-        android:id="@+id/crimeSolved"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/material_margin"
-        android:layout_marginRight="@dimen/material_margin"
-        android:text="@string/crime_solved_label"/>
-
-</LinearLayout>
+</ScrollView>

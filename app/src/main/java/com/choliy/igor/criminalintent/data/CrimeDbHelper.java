@@ -20,7 +20,8 @@ class CrimeDbHelper extends SQLiteOpenHelper {
                 CrimeContract.COLUMN_UUID + " INTEGER NOT NULL, " +
                 CrimeContract.COLUMN_TITLE + " TEXT, " +
                 CrimeContract.COLUMN_DATE + " INTEGER NOT NULL, " +
-                CrimeContract.COLUMN_SOLVED + " INTEGER);");
+                CrimeContract.COLUMN_SOLVED + " INTEGER, " +
+                CrimeContract.COLUMN_SUSPECT + " TEXT);");
     }
 
     @Override

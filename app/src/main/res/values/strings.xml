@@ -1,23 +1,37 @@
 <resources>
     <string name="app_name">Criminal Intent</string>
+    <string name="label_crime">Edit Crime</string>
 
     <!-- Crime -->
     <string name="crime_title_label">Title</string>
     <string name="crime_title_hint">Enter a title for the crime</string>
+    <string name="crime_title_empty">Crime title is empty</string>
     <string name="crime_details_label">Details</string>
     <string name="crime_solved_label">Solved?</string>
+    <string name="crime_suspect_text">Choose Suspect</string>
+    <string name="crime_suspect_error">No contacts App</string>
+
+    <!-- Crime report -->
+    <string name="crime_report_text">Send Crime Report</string>
+    <string name="crime_report_solved">The case is solved</string>
+    <string name="crime_report_unsolved">The case is not solved</string>
+    <string name="crime_report_no_suspect">there is no suspect.</string>
+    <string name="crime_report_suspect">the suspect is %s.</string>
+    <string name="crime_report_subject">Criminal Intent Crime Report</string>
+    <string name="crime_report_send">Send crime report via</string>
+    <string name="crime_report">%1$s.\nThe crime was discovered on %2$s. %3$s, and %4$s</string>
 
     <!-- Date and Time pickers -->
     <string name="date_picker_dialog_title">Date of crime</string>
     <string name="time_picker_dialog_title">Time of crime</string>
-    <string name="date_picker_button_title">Date Picker</string>
-    <string name="time_picker_button_title">Time Picker</string>
+    <string name="date_picker_button_title">Date picker</string>
+    <string name="time_picker_button_title">Time picker</string>
 
     <!-- Menu -->
-    <string name="menu_new_crime">New Crime</string>
-    <string name="menu_remove_crime">Remove Crime</string>
-    <string name="menu_show_subtitle">Show Subtitle</string>
-    <string name="menu_hide_subtitle">Hide Subtitle</string>
+    <string name="menu_new_crime">New crime</string>
+    <string name="menu_remove_crime">Remove crime</string>
+    <string name="menu_show_subtitle">Show subtitle</string>
+    <string name="menu_hide_subtitle">Hide subtitle</string>
     <plurals name="menu_subtitle_plural_format">
         <item quantity="one">%1$s crime</item>
         <item quantity="other">%1$s crimes</item>
@@ -35,6 +49,7 @@
 
     <!-- Other -->
     <string name="image_description_no_crimes">No crimes</string>
-    <string name="empty_list_text">No Crimes detected</string>
+    <string name="empty_list_text_primary">No crimes detected</string>
+    <string name="empty_list_text_secondary">Add new crime</string>
 
 </resources>

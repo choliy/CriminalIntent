@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="view_divider_width">0.8dp</dimen>
+    <dimen name="card_view_corners">3dp</dimen>
+    <dimen name="list_item_margin">6dp</dimen>
     <dimen name="small_margin">8dp</dimen>
-    <dimen name="material_margin">16dp</dimen>
-    <dimen name="normal_margin">32dp</dimen>
-    <dimen name="big_margin">64dp</dimen>
+    <dimen name="medium_margin">16dp</dimen>
+    <dimen name="big_margin">24dp</dimen>
     <dimen name="image_size">160dp</dimen>
 </resources>

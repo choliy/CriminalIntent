@@ -48,7 +48,7 @@ public class CrimeAdapter extends RecyclerView.Adapter<CrimeAdapter.CrimeHolder>
         mCrimes = crimes;
     }
 
-    public void emptyList() {
+    public void emptyListVisibility() {
         LinearLayout emptyList =
                 (LinearLayout) ((AppCompatActivity) mContext).findViewById(R.id.emptyList);
         if (getItemCount() > 0) emptyList.setVisibility(View.INVISIBLE);
@@ -88,7 +88,8 @@ public class CrimeAdapter extends RecyclerView.Adapter<CrimeAdapter.CrimeHolder>
 
         private void bindView(int position) {
             Crime crime = mCrimes.get(position);
-            mCrimeTitle.setText(crime.getTitle());
+            if (crime.getTitle().equals("")) mCrimeTitle.setText(R.string.crime_title_empty);
+            else mCrimeTitle.setText(crime.getTitle());
             String formattedDate = CrimeUtils.formatListDate(mContext, crime.getDate());
             mCrimeDate.setText(formattedDate);
             mCrimeSolved.setChecked(crime.isSolved());

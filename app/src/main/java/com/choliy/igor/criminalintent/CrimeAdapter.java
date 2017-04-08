@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.choliy.igor.criminalintent.data.CrimeLab;
+import com.choliy.igor.criminalintent.util.DateUtils;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,12 +21,12 @@ public class CrimeAdapter extends RecyclerView.Adapter<CrimeAdapter.CrimeHolder>
 
     private Context mContext;
     private List<Crime> mCrimes;
-    private OnCrimeClickListener mClickListener;
+    private OnCrimeClickListener mOnCrimeClick;
 
-    public CrimeAdapter(Context context, List<Crime> crimes, OnCrimeClickListener clickListener) {
+    public CrimeAdapter(Context context, List<Crime> crimes, OnCrimeClickListener onCrimeClick) {
         mContext = context;
         mCrimes = crimes;
-        mClickListener = clickListener;
+        mOnCrimeClick = onCrimeClick;
     }
 
     @Override
@@ -76,7 +77,7 @@ public class CrimeAdapter extends RecyclerView.Adapter<CrimeAdapter.CrimeHolder>
         public void onClick(View view) {
             int position = getAdapterPosition();
             UUID crimeId = mCrimes.get(position).getId();
-            mClickListener.onCrimeClick(crimeId);
+            mOnCrimeClick.onCrimeClick(crimeId);
         }
 
         @Override
@@ -88,10 +89,9 @@ public class CrimeAdapter extends RecyclerView.Adapter<CrimeAdapter.CrimeHolder>
 
         private void bindView(int position) {
             Crime crime = mCrimes.get(position);
-//            if (crime.getTitle().equals("")) mCrimeTitle.setText(R.string.crime_title_empty);
-//            else
-                mCrimeTitle.setText(crime.getTitle());
-            String formattedDate = CrimeUtils.formatListDate(mContext, crime.getDate());
+            if (crime.getTitle().equals("")) mCrimeTitle.setText(R.string.crime_title_empty);
+            else mCrimeTitle.setText(crime.getTitle());
+            String formattedDate = DateUtils.formatListDate(mContext, crime.getDate());
             mCrimeDate.setText(formattedDate);
             mCrimeSolved.setChecked(crime.isSolved());
             itemView.setTag(crime.getId());

@@ -6,6 +6,6 @@
     <dimen name="small_margin">8dp</dimen>
     <dimen name="medium_margin">16dp</dimen>
     <dimen name="big_margin">24dp</dimen>
-    <dimen name="photo_size">120dp</dimen>
+    <dimen name="photo_size">128dp</dimen>
     <dimen name="image_size">160dp</dimen>
 </resources>

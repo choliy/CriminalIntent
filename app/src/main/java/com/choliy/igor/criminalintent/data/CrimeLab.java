@@ -47,7 +47,7 @@ public class CrimeLab {
     private CrimeCursorWrapper queryCrimes(String whereClause, String[] whereArgs) {
         Cursor cursor = mDatabase.query(
                 CrimeContract.TABLE_NAME,
-                null, // null will choose all columns
+                null, // null will return all columns
                 whereClause,
                 whereArgs,
                 null, // groupBy

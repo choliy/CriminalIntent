@@ -41,6 +41,9 @@
     <string name="dialog_delete_title">Do you really want to delete this crime?</string>
     <string name="dialog_delete_yes">Yes</string>
     <string name="dialog_delete_no">No</string>
+    <string name="dialog_delete_close">Close</string>
+    <string name="dialog_big_photo_title">Crime photo</string>
+    <string name="dialog_no_photo_title">No Crime photo yet</string>
 
     <!-- StackBar -->
     <string name="snack_bar_text_removed">Crime removed</string>
@@ -49,7 +52,8 @@
 
     <!-- Other -->
     <string name="description_no_crimes">No crimes</string>
-    <string name="description_crime_picture">Crime picture</string>
+    <string name="description_crime_photo">Crime photo</string>
+    <string name="description_crime_big_photo">Big crime photo</string>
     <string name="empty_list_text_primary">No crimes detected</string>
     <string name="empty_list_text_secondary">Add new crime</string>
 

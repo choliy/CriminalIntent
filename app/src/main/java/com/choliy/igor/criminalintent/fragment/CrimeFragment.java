@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,10 +26,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.choliy.igor.criminalintent.Crime;
-import com.choliy.igor.criminalintent.CrimeUtils;
+import com.choliy.igor.criminalintent.CrimeConstants;
 import com.choliy.igor.criminalintent.R;
-import com.choliy.igor.criminalintent.data.CrimeConstants;
 import com.choliy.igor.criminalintent.data.CrimeLab;
+import com.choliy.igor.criminalintent.util.DateUtils;
+import com.choliy.igor.criminalintent.util.InfoUtils;
+import com.choliy.igor.criminalintent.util.PictureUtils;
 
 import java.io.File;
 import java.util.Date;
@@ -37,15 +40,13 @@ import java.util.UUID;
 public class CrimeFragment extends Fragment implements
         TextWatcher,
         View.OnClickListener,
+        View.OnLongClickListener,
         CompoundButton.OnCheckedChangeListener {
 
     private ImageView mPhotoPicker;
-    private EditText mCrimeTitle;
     private Button mDateButton;
     private Button mTimeButton;
     private Button mSuspectButton;
-    private Button mReportButton;
-    private CheckBox mSolvedCheckBox;
 
     private Crime mCrime;
     private File mPhotoFile;
@@ -76,70 +77,28 @@ public class CrimeFragment extends Fragment implements
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        PackageManager packageManager = getActivity().getPackageManager();
+        EditText crimeTitle = (EditText) view.findViewById(R.id.crimeTitle);
+        crimeTitle.addTextChangedListener(this);
 
-        // Setup Crime photo picker
-        mPhotoPicker = (ImageView) view.findViewById(R.id.crimePhoto);
-        mPhotoPicker.setOnClickListener(this);
-        mCapturePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        // If device has no camera or no free space for photo,
-        // set photoPicker enabled.
-        boolean canTakePhoto = mPhotoFile != null &&
-                mCapturePhoto.resolveActivity(packageManager) != null;
-        mPhotoPicker.setEnabled(canTakePhoto);
-
-        // If device has camera and free space,
-        // put photoUri to intent.
-        if (canTakePhoto) {
-            Uri photoUri;
-            if (Build.VERSION.SDK_INT >= 24) {
-                photoUri = FileProvider.getUriForFile(
-                        getActivity(),
-                        getActivity().getApplicationContext().getPackageName() + ".provider",
-                        mPhotoFile);
-            } else photoUri = Uri.fromFile(mPhotoFile);
-
-            mCapturePhoto.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-        }
-
-        // Setup Crime title
-        mCrimeTitle = (EditText) view.findViewById(R.id.crimeTitle);
-        mCrimeTitle.addTextChangedListener(this);
-
-        // Setup Crime date button
         mDateButton = (Button) view.findViewById(R.id.crimeDate);
         mDateButton.setOnClickListener(this);
 
-        // Setup Crime time button
         mTimeButton = (Button) view.findViewById(R.id.crimeTime);
         mTimeButton.setOnClickListener(this);
 
-        // Setup Crime suspend button
-        mSuspectButton = (Button) view.findViewById(R.id.crimeSuspect);
-        mSuspectButton.setOnClickListener(this);
-        if (mCrime.getSuspect() != null)
-            mSuspectButton.setText(mCrime.getSuspect());
+        Button reportButton = (Button) view.findViewById(R.id.crimeReport);
+        reportButton.setOnClickListener(this);
 
-        mPickContact = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-        if (packageManager.resolveActivity(mPickContact, PackageManager.MATCH_DEFAULT_ONLY) == null) {
-            mSuspectButton.setText(R.string.crime_suspect_error);
-            mSuspectButton.setEnabled(false);
-        }
+        CheckBox solvedCheckBox = (CheckBox) view.findViewById(R.id.crimeSolved);
+        solvedCheckBox.setOnCheckedChangeListener(this);
 
-        // Setup Crime report button
-        mReportButton = (Button) view.findViewById(R.id.crimeReport);
-        mReportButton.setOnClickListener(this);
+        PackageManager packageManager = getActivity().getPackageManager();
+        setupPhotoPicker(view, packageManager);
+        setupSuspendButton(view, packageManager);
 
-        // Setup Crime solved checkBox
-        mSolvedCheckBox = (CheckBox) view.findViewById(R.id.crimeSolved);
-        mSolvedCheckBox.setOnCheckedChangeListener(this);
-
-        // Update Crime
-        mCrimeTitle.setText(mCrime.getTitle());
-        mSolvedCheckBox.setChecked(mCrime.isSolved());
-        updateDate();
-        updateTime();
+        crimeTitle.setText(mCrime.getTitle());
+        solvedCheckBox.setChecked(mCrime.isSolved());
+        updateDateTime();
     }
 
     @Override
@@ -156,8 +115,7 @@ public class CrimeFragment extends Fragment implements
             case CrimeConstants.REQUEST_CODE_PICKER:
                 Date date = (Date) data.getSerializableExtra(CrimeConstants.EXTRA_DATE_TIME);
                 mCrime.setDate(date);
-                updateDate();
-                updateTime();
+                updateDateTime();
                 break;
             case CrimeConstants.REQUEST_CODE_CONTACT:
                 if (data == null) break;
@@ -175,7 +133,7 @@ public class CrimeFragment extends Fragment implements
                     if (cursor.getCount() == 0) return;
                     cursor.moveToFirst();
 
-                    // Get data from the first row - name of suspect
+                    // Get data from the first row - name of contact
                     String suspect = cursor.getString(0);
                     mCrime.setSuspect(suspect);
                     mSuspectButton.setText(suspect);
@@ -185,7 +143,7 @@ public class CrimeFragment extends Fragment implements
                 }
                 break;
             case CrimeConstants.REQUEST_CODE_PHOTO:
-                // TODO
+                updatePhotoPicker();
                 break;
         }
     }
@@ -233,8 +191,66 @@ public class CrimeFragment extends Fragment implements
     }
 
     @Override
+    public boolean onLongClick(View view) {
+        Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), getActivity());
+        InfoUtils.photoDialog(getActivity(), bitmap);
+        return true;
+    }
+
+    @Override
     public void onCheckedChanged(CompoundButton button, boolean isChecked) {
         mCrime.setSolved(isChecked);
+    }
+
+    private void setupPhotoPicker(View view, PackageManager packageManager) {
+        mPhotoPicker = (ImageView) view.findViewById(R.id.crimePhoto);
+        mPhotoPicker.setOnClickListener(this);
+        mPhotoPicker.setOnLongClickListener(this);
+        mCapturePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        // If device has no camera or no free space for photo,
+        // set photoPicker enabled.
+        boolean canTakePhoto = mPhotoFile != null &&
+                mCapturePhoto.resolveActivity(packageManager) != null;
+        mPhotoPicker.setEnabled(canTakePhoto);
+
+        // If device has camera and free space,
+        // put photoUri to intent.
+        if (canTakePhoto) {
+            Uri photoUri;
+            if (Build.VERSION.SDK_INT >= 24) {
+                photoUri = FileProvider.getUriForFile(
+                        getActivity(),
+                        getActivity().getApplicationContext().getPackageName() + ".provider",
+                        mPhotoFile);
+            } else photoUri = Uri.fromFile(mPhotoFile);
+
+            mCapturePhoto.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+        }
+
+        updatePhotoPicker();
+    }
+
+    private void updatePhotoPicker() {
+        if (mPhotoFile == null || !mPhotoFile.exists()) {
+            mPhotoPicker.setImageResource(R.drawable.ic_crime_photo);
+        } else {
+            Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), getActivity());
+            mPhotoPicker.setImageBitmap(bitmap);
+        }
+    }
+
+    private void setupSuspendButton(View view, PackageManager packageManager) {
+        mSuspectButton = (Button) view.findViewById(R.id.crimeSuspect);
+        mSuspectButton.setOnClickListener(this);
+        if (mCrime.getSuspect() != null)
+            mSuspectButton.setText(mCrime.getSuspect());
+
+        mPickContact = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+        if (packageManager.resolveActivity(mPickContact, PackageManager.MATCH_DEFAULT_ONLY) == null) {
+            mSuspectButton.setText(R.string.crime_suspect_error);
+            mSuspectButton.setEnabled(false);
+        }
     }
 
     private String getCrimeReport() {
@@ -244,7 +260,7 @@ public class CrimeFragment extends Fragment implements
         else
             solvedString = getString(R.string.crime_report_unsolved);
 
-        String dateString = CrimeUtils.formatCrimeReport(getActivity(), mCrime.getDate());
+        String dateString = DateUtils.formatCrimeReport(getActivity(), mCrime.getDate());
 
         String suspect = mCrime.getSuspect();
         if (suspect == null)
@@ -268,16 +284,15 @@ public class CrimeFragment extends Fragment implements
         DateTimePickerFragment pickerFragment = DateTimePickerFragment
                 .newInstance(mCrime.getDate(), pickerType);
         pickerFragment.setTargetFragment(CrimeFragment.this, CrimeConstants.REQUEST_CODE_PICKER);
-        pickerFragment.show(getActivity().getSupportFragmentManager(), CrimeConstants.TAG_DIALOG);
+        pickerFragment.show(
+                getActivity().getSupportFragmentManager(),
+                CrimeConstants.TAG_DATE_TIME_DIALOG);
     }
 
-    private void updateDate() {
-        String formattedDate = CrimeUtils.formatDate(mCrime.getDate());
+    private void updateDateTime() {
+        String formattedDate = DateUtils.formatDate(mCrime.getDate());
         mDateButton.setText(formattedDate);
-    }
-
-    private void updateTime() {
-        String formattedDate = CrimeUtils.formatTime(getActivity(), mCrime.getDate());
-        mTimeButton.setText(formattedDate);
+        String formattedTime = DateUtils.formatTime(getActivity(), mCrime.getDate());
+        mTimeButton.setText(formattedTime);
     }
 }

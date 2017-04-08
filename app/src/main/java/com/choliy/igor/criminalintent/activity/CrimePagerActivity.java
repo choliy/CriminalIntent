@@ -10,11 +10,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.choliy.igor.criminalintent.Crime;
-import com.choliy.igor.criminalintent.CrimeUtils;
+import com.choliy.igor.criminalintent.CrimeConstants;
 import com.choliy.igor.criminalintent.R;
-import com.choliy.igor.criminalintent.data.CrimeConstants;
 import com.choliy.igor.criminalintent.data.CrimeLab;
 import com.choliy.igor.criminalintent.fragment.CrimeFragment;
+import com.choliy.igor.criminalintent.util.InfoUtils;
 
 import java.util.List;
 import java.util.UUID;
@@ -77,8 +77,8 @@ public class CrimePagerActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuDeleteCrime:
-                Crime crime = mCrimes.get(mCrimePosition);
-                CrimeUtils.deleteDialog(CrimePagerActivity.this, crime.getId(), this);
+                UUID crimeId = mCrimes.get(mCrimePosition).getId();
+                InfoUtils.deleteDialog(CrimePagerActivity.this, crimeId, this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

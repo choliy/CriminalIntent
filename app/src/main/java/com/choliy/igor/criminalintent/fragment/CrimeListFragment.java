@@ -16,11 +16,11 @@ import android.view.ViewGroup;
 
 import com.choliy.igor.criminalintent.Crime;
 import com.choliy.igor.criminalintent.CrimeAdapter;
-import com.choliy.igor.criminalintent.CrimeUtils;
+import com.choliy.igor.criminalintent.CrimeConstants;
 import com.choliy.igor.criminalintent.R;
 import com.choliy.igor.criminalintent.activity.CrimePagerActivity;
-import com.choliy.igor.criminalintent.data.CrimeConstants;
 import com.choliy.igor.criminalintent.data.CrimeLab;
+import com.choliy.igor.criminalintent.util.InfoUtils;
 
 import java.util.List;
 import java.util.UUID;
@@ -140,11 +140,12 @@ public class CrimeListFragment extends Fragment implements CrimeAdapter.OnCrimeC
             UUID uuid = (UUID) viewHolder.itemView.getTag();
             Crime crime = CrimeLab.getInstance(getActivity()).getCrime(uuid);
             CrimeLab.getInstance(getActivity()).deleteCrime(uuid);
+
             mAdapter.updateCrimeList(CrimeLab.getInstance(getActivity()).getCrimes());
             mAdapter.notifyItemRemoved(position);
             mAdapter.emptyListVisibility();
 
-            CrimeUtils.undoSnackBar(
+            InfoUtils.undoSnackBar(
                     getActivity(),
                     getView(),
                     crime,

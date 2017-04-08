@@ -1,58 +1,23 @@
-package com.choliy.igor.criminalintent;
+package com.choliy.igor.criminalintent.util;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.text.format.DateFormat;
 import android.view.View;
+import android.widget.ImageView;
 
-import com.choliy.igor.criminalintent.data.CrimeConstants;
+import com.choliy.igor.criminalintent.Crime;
+import com.choliy.igor.criminalintent.CrimeAdapter;
+import com.choliy.igor.criminalintent.R;
 import com.choliy.igor.criminalintent.data.CrimeLab;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
-public final class CrimeUtils {
-
-    public static String formatListDate(Context context, Date date) {
-        SimpleDateFormat sdf;
-        if (DateFormat.is24HourFormat(context))
-            sdf = new SimpleDateFormat(CrimeConstants.INFO_DATE_FORMAT_UK, Locale.UK);
-        else
-            sdf = new SimpleDateFormat(CrimeConstants.INFO_DATE_FORMAT_US, Locale.US);
-
-        return sdf.format(date);
-    }
-
-    public static String formatDate(Date date) {
-        SimpleDateFormat sdf = new SimpleDateFormat(CrimeConstants.DATE_FORMAT, Locale.ENGLISH);
-        return sdf.format(date);
-    }
-
-    public static String formatTime(Context context, Date time) {
-        SimpleDateFormat sdf;
-        if (DateFormat.is24HourFormat(context))
-            sdf = new SimpleDateFormat(CrimeConstants.TIME_FORMAT_UK, Locale.UK);
-        else
-            sdf = new SimpleDateFormat(CrimeConstants.TIME_FORMAT_US, Locale.US);
-
-        return sdf.format(time);
-    }
-
-    public static String formatCrimeReport(Context context, Date date) {
-        String formattedReport;
-        if (DateFormat.is24HourFormat(context))
-            formattedReport = DateFormat.format(CrimeConstants.INFO_DATE_FORMAT_UK, date).toString();
-        else
-            formattedReport = DateFormat.format(CrimeConstants.INFO_DATE_FORMAT_US, date).toString();
-
-        return formattedReport;
-    }
+public final class InfoUtils {
 
     public static void deleteDialog(final Context context,
                                     final UUID uuid,
@@ -73,6 +38,32 @@ public final class CrimeUtils {
                 dialog.dismiss();
             }
         });
+        builder.show();
+    }
+
+    public static void photoDialog(Context context, Bitmap bitmap) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        String titleText;
+        if (bitmap == null) {
+            titleText = context.getString(R.string.dialog_no_photo_title);
+        } else {
+            final View view = View.inflate(context, R.layout.dialog_photo, null);
+            final ImageView photo = (ImageView) view.findViewById(R.id.bigCrimePhoto);
+            titleText = context.getString(R.string.dialog_big_photo_title);
+            photo.setImageBitmap(bitmap);
+            builder.setView(view);
+        }
+
+        builder.setTitle(titleText);
+        builder.setNegativeButton(
+                R.string.dialog_delete_close,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
         builder.show();
     }
 
